@@ -1,7 +1,7 @@
 package Mojolicious::Plugin::RenderSteps;
 use Mojo::Base 'Mojolicious::Plugin';
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub register {
   my ($self, $app) = @_;
@@ -17,6 +17,7 @@ sub register {
           $self->render_maybe or $self->render_not_found;
         }
       );
+      $delay->wait unless Mojo::IOLoop->is_running;
     }
   );
 }
@@ -47,11 +48,14 @@ Mojolicious::Plugin::RenderSteps - ASync controllers without the boilerplate
   };
 
 =head1 DESCRIPTION
-§
+
 L<Mojolicious::Plugin::RenderSteps> lets you run async callbacks easily. When
 you call render_steps, it will automatically call render_later, and create
 a L<Mojo::IOLoop::Delay> object, pass it your steps, and set up automatic
 rendering and error handling. This makes async actions behave like sync ones.
+
+render_steps also automatically calls wait if the ioloop isn't running, so steps
+will function under PSGI, for instance.
 
 =head1 METHODS
 
