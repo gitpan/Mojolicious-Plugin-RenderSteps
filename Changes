@@ -1,3 +1,8 @@
+0.03 31-05-2014
+  - Implement support for nesting steps
+  - Capture tx for not_found
+  - Fix typo in SYNOPSIS
+
 0.02 26-05-2014
   - Fix a pod typo
   - Implicit wait for actions running without a IOLoop

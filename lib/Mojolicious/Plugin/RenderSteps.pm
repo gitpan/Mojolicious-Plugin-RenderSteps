@@ -1,20 +1,25 @@
 package Mojolicious::Plugin::RenderSteps;
 use Mojo::Base 'Mojolicious::Plugin';
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 sub register {
   my ($self, $app) = @_;
   $app->helper(
     render_steps => sub {
       my ($self, @steps) = @_;
+      my $tx = $self->tx;
       $self->render_later;
+      $self->stash->{'rendersteps.depth'}++;
       my $delay = Mojo::IOLoop->delay(@steps);
       $delay->on(error => sub { $self->render_exception });
       $delay->on(
         finish => sub {
           my $delay = shift;
-          $self->render_maybe or $self->render_not_found;
+          $tx;
+          $self->render_maybe
+            or $self->render_not_found
+            unless --$self->stash->{'rendersteps.depth'};
         }
       );
       $delay->wait unless Mojo::IOLoop->is_running;
@@ -37,7 +42,7 @@ Mojolicious::Plugin::RenderSteps - ASync controllers without the boilerplate
   plugin 'RenderSteps';
 
   get '/foo' => sub {
-    my $self->shift;
+    my $self=shift;
     $self->render_steps(sub {
       my $delay=shift;
       $self->ua->get('reddit.com/',$delay->begin);
@@ -56,17 +61,6 @@ rendering and error handling. This makes async actions behave like sync ones.
 
 render_steps also automatically calls wait if the ioloop isn't running, so steps
 will function under PSGI, for instance.
-
-=head1 METHODS
-
-L<Mojolicious::Plugin::RenderSteps> inherits all methods from
-L<Mojolicious::Plugin> and implements the following new ones.
-
-=head2 register
-
-  $plugin->register(Mojolicious->new);
-
-Creates the render_steps helper.
 
 =head1 SEE ALSO
 
