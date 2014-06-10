@@ -37,5 +37,16 @@
       }
    },
    "release_status" : "stable",
-   "version" : "0.04"
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/marcusramberg/Mojolicious-Plugin-RenderSteps/issues"
+      },
+      "license" : [
+         "http://www.opensource.org/licenses/artistic-license-2.0"
+      ],
+      "repository" : {
+         "url" : "https://github.com/marcusramberg/Mojolicious-Plugin-RenderSteps"
+      }
+   },
+   "version" : "0.05"
 }

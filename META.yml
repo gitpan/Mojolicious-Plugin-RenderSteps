@@ -19,4 +19,8 @@ no_index:
     - inc
 requires:
   Mojolicious: '4.99'
-version: '0.04'
+resources:
+  bugtracker: https://github.com/marcusramberg/Mojolicious-Plugin-RenderSteps/issues
+  license: http://www.opensource.org/licenses/artistic-license-2.0
+  repository: https://github.com/marcusramberg/Mojolicious-Plugin-RenderSteps
+version: '0.05'
